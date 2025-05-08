@@ -6,6 +6,7 @@ import MainChart from './MainChart'
 const DeviceStatusChart = () => {
   const [chartData, setChartData] = useState(null)
   const deviceId = 'e6d8ace0-1b87-11f0-b556-e7ea660b8ad9'
+  const [timeRange, setTimeRange] = useState('')
   // 그래프에 출력할 상태키 배열
   const visibleKeys = useMemo(() => ['wh40batt', 'baromrelin', 'soilad1', 'rainratein'], [])
 
@@ -50,11 +51,16 @@ const DeviceStatusChart = () => {
 
         console.log('resData', deviceValues)
 
-        const timeStamps = deviceValues[availableVisibleKeys[0]]?.map((d) =>
-          new Date(d.ts).toLocaleTimeString(),
-        )
+        const timeStamps = deviceValues[availableVisibleKeys[0]]?.map((d) => d.ts) || []
 
         const reverseTimeStamps = timeStamps.reverse()
+
+        const startLabel = new Date(reverseTimeStamps[0]).toLocaleTimeString()
+        const endLabel = new Date(
+          reverseTimeStamps[reverseTimeStamps.length - 1],
+        ).toLocaleTimeString()
+
+        setTimeRange(`${startLabel} ~ ${endLabel}`)
 
         const datasets = availableVisibleKeys.map((key, idx) => ({
           label: key,
@@ -80,10 +86,10 @@ const DeviceStatusChart = () => {
         <CCardBody>
           <CRow>
             <CCol sm={5}>
-              <h4 id="traffic" className="card-title mb-0">
+              <h4 id="traffic" className="card-title mb-1">
                 기기 상태 조회
               </h4>
-              <div className="small text-body-secondary">January</div>
+              <div className="small text-body-secondary">최근 데이터 범위: {timeRange}</div>
             </CCol>
           </CRow>
           {chartData && <MainChart labels={chartData.labels} datasets={chartData.datasets} />}

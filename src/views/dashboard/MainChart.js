@@ -62,17 +62,51 @@ const MainChart = ({ labels, datasets }) => {
     ...ds,
     ...(chartStyles[idx] || chartStyles[chartStyles.length - 1]),
   }))
+
+  const formattedLabels = labels.map((ts) =>
+    new Date(ts).toLocaleTimeString('ko-KR', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    }),
+  )
+
+  // Y축 라벨. 받아오는 데이터 값에 따라 유동적으로 출력하기 위함.
+  const calculateYAxisStep = (datasets) => {
+    const allValues = datasets.flatMap((ds) => ds.data)
+    const max = Math.max(...allValues, 1)
+
+    const roughStep = Math.ceil(max / 8)
+    const niceStep = Math.ceil(roughStep / 10) * 10 || 1
+
+    return niceStep
+  }
+  const yStepSize = calculateYAxisStep(styledDatasets)
+
   return (
     <>
       <CChartLine
         ref={chartRef}
         style={{ height: '300px', marginTop: '40px' }}
-        data={{ labels, datasets: styledDatasets }}
+        data={{ labels: formattedLabels, datasets: styledDatasets }}
         options={{
           maintainAspectRatio: false,
           plugins: {
             legend: {
               display: true,
+            },
+            tooltip: {
+              callbacks: {
+                title: (tooltipItems) => {
+                  const ts = labels[tooltipItems[0].dataIndex]
+                  return new Date(ts).toLocaleTimeString('ko-KR', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: false,
+                  })
+                },
+              },
             },
           },
           scales: {
@@ -83,6 +117,8 @@ const MainChart = ({ labels, datasets }) => {
               },
               ticks: {
                 color: getStyle('--cui-body-color'),
+                autoSkip: true,
+                maxTicksLimit: 10,
               },
             },
             y: {
@@ -93,11 +129,11 @@ const MainChart = ({ labels, datasets }) => {
               grid: {
                 color: getStyle('--cui-border-color-translucent'),
               },
-              max: 250,
+              maxTicksLimit: 10,
               ticks: {
                 color: getStyle('--cui-body-color'),
                 maxTicksLimit: 5,
-                stepSize: Math.ceil(250 / 5),
+                stepSize: yStepSize,
               },
             },
           },
