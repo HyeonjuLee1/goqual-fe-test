@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
 import {
   CButton,
   CCard,
@@ -19,7 +18,6 @@ import { cilLockLocked, cilUser } from '@coreui/icons'
 import axiosInst from '../../../api/axios'
 
 const Login = () => {
-  const navigate = useNavigate()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -36,8 +34,12 @@ const Login = () => {
       })
       const { token } = res.data
       console.log('token', token)
-      localStorage.setItem('token', token)
-      navigate('/dashboard')
+      if (token) {
+        localStorage.setItem('token', token)
+        window.location.replace('/')
+      } else {
+        throw new Error('토큰이 응답에 없습니다.')
+      }
     } catch (err) {
       const msg = err.response?.data?.message
       if (msg === 'Invalid username or password' || msg === 'Authentication failed') {
