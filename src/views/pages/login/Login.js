@@ -25,8 +25,15 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault()
-    console.log('handleLogin')
     setLoading(true)
+    setError('')
+
+    if (!username || !password) {
+      setError('아이디와 비밀번호를 모두 입력해주세요.')
+      setLoading(false)
+      return
+    }
+
     try {
       const res = await axiosInst.post('/api/auth/login', {
         username,
@@ -75,6 +82,7 @@ const Login = () => {
                         autoComplete="username"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
+                        invalid={error}
                       />
                     </CInputGroup>
 
@@ -90,11 +98,12 @@ const Login = () => {
                         autoComplete="current-password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        invalid={error}
                       />
                     </CInputGroup>
                     {error && (
                       <p className="text-danger small" style={{ fontSize: '12px' }}>
-                        아이디 또는 비밀번호를 확인하세요.
+                        {error}
                       </p>
                     )}
                     <CRow>
