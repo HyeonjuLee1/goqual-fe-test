@@ -12,6 +12,7 @@ import {
   CInputGroup,
   CInputGroupText,
   CRow,
+  CSpinner,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
@@ -38,7 +39,13 @@ const Login = () => {
       localStorage.setItem('token', token)
       navigate('/dashboard')
     } catch (err) {
-      console.log('로그인 실패: 아이디 또는 비밀번호를 확인하세요.', err)
+      const msg = err.response?.data?.message
+      if (msg === 'Invalid username or password' || msg === 'Authentication failed') {
+        setError('아이디 또는 비밀번호를 확인하세요.')
+      } else {
+        setError('로그인 중 문제가 발생했습니다.')
+      }
+      console.log('로그인 에러:', err)
     } finally {
       setLoading(false)
     }
@@ -68,7 +75,8 @@ const Login = () => {
                         onChange={(e) => setUsername(e.target.value)}
                       />
                     </CInputGroup>
-                    <CInputGroup className="mb-4">
+
+                    <CInputGroup className={error ? 'mb-1' : 'mb-4'}>
                       <CInputGroupText>
                         <CIcon icon={cilLockLocked} />
                       </CInputGroupText>
@@ -82,10 +90,15 @@ const Login = () => {
                         onChange={(e) => setPassword(e.target.value)}
                       />
                     </CInputGroup>
+                    {error && (
+                      <p className="text-danger small" style={{ fontSize: '12px' }}>
+                        아이디 또는 비밀번호를 확인하세요.
+                      </p>
+                    )}
                     <CRow>
                       <CCol>
                         <CButton type="submit" color="primary" className="px-4 w-100">
-                          Login
+                          {loading ? <CSpinner size="sm" color="light" /> : 'Login'}
                         </CButton>
                       </CCol>
                     </CRow>
