@@ -12,7 +12,7 @@ const DeviceStatusChart = () => {
     const end = Date.now()
     return {
       endTs: end,
-      startTs: end - 1000 * 60 * 60,
+      startTs: end - 10 * 60 * 1000,
     }
   }, [])
 
