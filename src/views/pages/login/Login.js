@@ -15,7 +15,7 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
-import axios from 'axios'
+import axiosInst from '../../../api/axios'
 
 const Login = () => {
   const navigate = useNavigate()
@@ -29,12 +29,13 @@ const Login = () => {
     console.log('handleLogin')
     setLoading(true)
     try {
-      const res = await axios.post('http://hejdev1.goqual.com:8080/api/auth/login', {
+      const res = await axiosInst.post('/api/auth/login', {
         username,
         password,
       })
       const { token } = res.data
       console.log('token', token)
+      localStorage.setItem('token', token)
       navigate('/dashboard')
     } catch (err) {
       console.log('로그인 실패: 아이디 또는 비밀번호를 확인하세요.', err)
