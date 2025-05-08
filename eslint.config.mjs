@@ -32,6 +32,13 @@ export default [
       },
     },
     rules: {
+      //  Delete `␍` eslint (prettier/prettier) 해결하기 위함.
+      'prettier/prettier': [
+        'error',
+        {
+          endOfLine: 'auto',
+        },
+      ],
       ...eslintPluginReactHooks.configs.recommended.rules,
     },
   },
