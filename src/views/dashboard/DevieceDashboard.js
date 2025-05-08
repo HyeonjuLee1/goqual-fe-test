@@ -51,11 +51,11 @@ const DeviceStatusChart = () => {
         console.log('resData', deviceValues)
 
         const timeStamps = deviceValues[availableVisibleKeys[0]].map((d) =>
-          new Date(d.ts).toLocaleTimeString(),
+          new Date(d.ts).toLocaleTimeString().reverse(),
         )
         const datasets = availableVisibleKeys.map((key, idx) => ({
           label: key,
-          data: deviceValues[key]?.map((d) => Number(d.value)) || [],
+          data: deviceValues[key]?.map((d) => Number(d.value)).reverse() || [],
           backgroundColor: 'transparent',
           borderColor: `hsl(${idx * 90}, 70%, 50%)`,
           pointHoverBackgroundColor: `hsl(${idx * 90}, 70%, 50%)`,
