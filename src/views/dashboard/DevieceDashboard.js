@@ -1,14 +1,20 @@
 import { CCard, CCardBody, CCardHeader } from '@coreui/react'
 import { CChartLine } from '@coreui/react-chartjs'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import axiosInst from '../../api/axios'
 
 const DeviceStatusChart = () => {
   const [chartData, setChartData] = useState(null)
   const deviceId = 'e6d8ace0-1b87-11f0-b556-e7ea660b8ad9'
   const keys = ['wh40batt', 'baromrelin', 'soilad1', 'rainratein']
-  const endTs = Date.now()
-  const startTs = endTs - 1000 * 60 * 60 // 1시간 전
+
+  const { startTs, endTs } = useMemo(() => {
+    const end = Date.now()
+    return {
+      endTs: end,
+      startTs: end - 1000 * 60 * 60,
+    }
+  }, [])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,13 +38,27 @@ const DeviceStatusChart = () => {
 
         const resData = valuesRes.data
         console.log('resData', resData)
+
+        const timeStamps = resData[keys[0]].map((d) => new Date(d.ts).toLocaleTimeString())
+
+        const datasets = keys.map((key, idx) => ({
+          label: key,
+          data: resData[key]?.map((d) => Number(d.value)) || [],
+          borderColor: `hsl(${idx * 90}, 70%, 50%)`,
+          fill: false,
+        }))
+
+        setChartData({
+          labels: timeStamps,
+          datasets,
+        })
       } catch (err) {
         console.error('그래프 데이터 조회 실패:', err)
       }
     }
 
     fetchData()
-  }, [])
+  }, [endTs, startTs])
 
   return (
     <CCard>
