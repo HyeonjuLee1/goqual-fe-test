@@ -1,0 +1,34 @@
+.brightness-slider {
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 5px;
+  background-color: #000;
+  background-image: linear-gradient(#eeeeee, #eeeeee);
+  background-repeat: no-repeat;
+  background-size: 60% 100%;
+  cursor: pointer;
+  outline: none;
+}
+
+/* Chrome, Edge */
+.brightness-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #eeeeee;
+  border: none;
+  margin-top: -4px;
+  cursor: pointer;
+}
+
+/* Firefox */
+.brightness-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #eeeeee;
+  border: none;
+  cursor: pointer;
+}

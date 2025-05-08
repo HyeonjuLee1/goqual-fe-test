@@ -2,6 +2,7 @@ import { CCard, CCardBody, CCol, CRow } from '@coreui/react'
 import { useEffect, useMemo, useState } from 'react'
 import axiosInst from '../../api/axios'
 import MainChart from './MainChart'
+import BrightnessControl from './BrightnessControl'
 
 const DeviceStatusChart = () => {
   const [chartData, setChartData] = useState(null)
@@ -95,6 +96,7 @@ const DeviceStatusChart = () => {
           {chartData && <MainChart labels={chartData.labels} datasets={chartData.datasets} />}
         </CCardBody>
       </CCard>
+      <BrightnessControl />
     </>
   )
 }
