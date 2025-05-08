@@ -4,7 +4,7 @@ import axiosInst from '../../api/axios'
 import MainChart from './MainChart'
 import BrightnessControl from './BrightnessControl'
 
-const DevieceDashboard = () => {
+const DeviceDashboard = () => {
   const [chartData, setChartData] = useState(null)
   const deviceId = 'e6d8ace0-1b87-11f0-b556-e7ea660b8ad9'
   const [timeRange, setTimeRange] = useState('')
@@ -101,4 +101,4 @@ const DevieceDashboard = () => {
   )
 }
 
-export default DevieceDashboard
+export default DeviceDashboard
