@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react'
 import { CChartLine } from '@coreui/react-chartjs'
 import { getStyle } from '@coreui/utils'
 
-const MainChart = () => {
+const MainChart = ({ labels, datasets }) => {
   const chartRef = useRef(null)
 
   useEffect(() => {
@@ -26,65 +26,53 @@ const MainChart = () => {
     })
   }, [chartRef])
 
-  const random = () => Math.round(Math.random() * 100)
+  const chartStyles = [
+    {
+      borderColor: getStyle('--cui-info'),
+      backgroundColor: `rgba(${getStyle('--cui-info-rgb')}, 0.1)`,
+      pointHoverBackgroundColor: getStyle('--cui-info'),
+      borderWidth: 2,
+      fill: true,
+    },
+    {
+      borderColor: getStyle('--cui-success'),
+      backgroundColor: 'transparent',
+      pointHoverBackgroundColor: getStyle('--cui-success'),
+      borderWidth: 2,
+      fill: false,
+    },
+    {
+      borderColor: getStyle('--cui-danger'),
+      backgroundColor: 'transparent',
+      pointHoverBackgroundColor: getStyle('--cui-danger'),
+      borderWidth: 1,
+      borderDash: [8, 5],
+      fill: false,
+    },
+    {
+      borderColor: 'gray',
+      backgroundColor: 'transparent',
+      pointHoverBackgroundColor: 'gray',
+      borderWidth: 1,
+      fill: false,
+    },
+  ]
 
+  const styledDatasets = datasets.map((ds, idx) => ({
+    ...ds,
+    ...(chartStyles[idx] || chartStyles[chartStyles.length - 1]),
+  }))
   return (
     <>
       <CChartLine
         ref={chartRef}
         style={{ height: '300px', marginTop: '40px' }}
-        data={{
-          labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-          datasets: [
-            {
-              label: 'My First dataset',
-              backgroundColor: `rgba(${getStyle('--cui-info-rgb')}, .1)`,
-              borderColor: getStyle('--cui-info'),
-              pointHoverBackgroundColor: getStyle('--cui-info'),
-              borderWidth: 2,
-              data: [
-                random(50, 200),
-                random(50, 200),
-                random(50, 200),
-                random(50, 200),
-                random(50, 200),
-                random(50, 200),
-                random(50, 200),
-              ],
-              fill: true,
-            },
-            {
-              label: 'My Second dataset',
-              backgroundColor: 'transparent',
-              borderColor: getStyle('--cui-success'),
-              pointHoverBackgroundColor: getStyle('--cui-success'),
-              borderWidth: 2,
-              data: [
-                random(50, 200),
-                random(50, 200),
-                random(50, 200),
-                random(50, 200),
-                random(50, 200),
-                random(50, 200),
-                random(50, 200),
-              ],
-            },
-            {
-              label: 'My Third dataset',
-              backgroundColor: 'transparent',
-              borderColor: getStyle('--cui-danger'),
-              pointHoverBackgroundColor: getStyle('--cui-danger'),
-              borderWidth: 1,
-              borderDash: [8, 5],
-              data: [65, 65, 65, 65, 65, 65, 65],
-            },
-          ],
-        }}
+        data={{ labels, datasets: styledDatasets }}
         options={{
           maintainAspectRatio: false,
           plugins: {
             legend: {
-              display: false,
+              display: true,
             },
           },
           scales: {
