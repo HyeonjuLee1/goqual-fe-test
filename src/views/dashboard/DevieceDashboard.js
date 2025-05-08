@@ -50,19 +50,22 @@ const DeviceStatusChart = () => {
 
         console.log('resData', deviceValues)
 
-        const timeStamps = deviceValues[availableVisibleKeys[0]].map((d) =>
-          new Date(d.ts).toLocaleTimeString().reverse(),
+        const timeStamps = deviceValues[availableVisibleKeys[0]]?.map((d) =>
+          new Date(d.ts).toLocaleTimeString(),
         )
+
+        const reverseTimeStamps = timeStamps.reverse()
+
         const datasets = availableVisibleKeys.map((key, idx) => ({
           label: key,
-          data: deviceValues[key]?.map((d) => Number(d.value)).reverse() || [],
+          data: (deviceValues[key]?.map((d) => Number(d.value)) || []).reverse(),
           backgroundColor: 'transparent',
           borderColor: `hsl(${idx * 90}, 70%, 50%)`,
           pointHoverBackgroundColor: `hsl(${idx * 90}, 70%, 50%)`,
           borderWidth: 2,
         }))
 
-        setChartData({ labels: timeStamps, datasets })
+        setChartData({ labels: reverseTimeStamps, datasets })
       } catch (err) {
         console.error('그래프 데이터 조회 실패:', err)
       }
