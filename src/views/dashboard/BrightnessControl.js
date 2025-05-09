@@ -30,6 +30,9 @@ const BrightnessControl = () => {
     [deviceId],
   )
 
+  // 밝기 비율에 따른 슬라이더 배경
+  const background = `linear-gradient(to right, #eeeeee ${brightness}%, #111111 ${brightness}%)`
+
   return (
     <div style={{ width: '300px' }}>
       <CCard className="p-3 text-white bg-dark">
@@ -46,14 +49,16 @@ const BrightnessControl = () => {
             />
           </div>
 
-          <CFormRange
-            min={0}
-            max={100}
+          <input
+            type="range"
+            className="brightness-slider"
+            min="0"
+            max="100"
             value={brightness}
             onChange={handleBrightnessChange}
-            className="brightness-slider"
             style={{
-              backgroundSize: `${brightness}% 100%`,
+              '--progress': `${brightness}%`,
+              '--bg-end': '#2d2f36',
             }}
           />
           <div className="mt-2 small">밝기: {brightness}%</div>
