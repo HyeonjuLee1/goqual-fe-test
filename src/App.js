@@ -8,6 +8,8 @@ import './scss/style.scss'
 // We use those styles to show code examples, you should remove them in your application.
 import './scss/examples.scss'
 
+import { DeviceContext } from './context/DeviceContext'
+
 // Containers
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
 
@@ -19,6 +21,7 @@ const Page500 = React.lazy(() => import('./views/pages/page500/Page500'))
 
 const App = () => {
   const [token, setToken] = useState(() => localStorage.getItem('token'))
+  const deviceId = 'e6d8ace0-1b87-11f0-b556-e7ea660b8ad9'
   console.log('token', token)
   useEffect(() => {
     const handleStorage = () => {
@@ -47,23 +50,28 @@ const App = () => {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <HashRouter>
-      <Suspense
-        fallback={
-          <div className="pt-3 text-center">
-            <CSpinner color="primary" variant="grow" />
-          </div>
-        }
-      >
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/404" element={<Page404 />} />
-          <Route path="/500" element={<Page500 />} />
-          <Route path="/*" element={token ? <DefaultLayout /> : <Navigate to="/login" replace />} />
-        </Routes>
-      </Suspense>
-    </HashRouter>
+    <DeviceContext.Provider value={{ deviceId }}>
+      <HashRouter>
+        <Suspense
+          fallback={
+            <div className="pt-3 text-center">
+              <CSpinner color="primary" variant="grow" />
+            </div>
+          }
+        >
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/404" element={<Page404 />} />
+            <Route path="/500" element={<Page500 />} />
+            <Route
+              path="/*"
+              element={token ? <DefaultLayout /> : <Navigate to="/login" replace />}
+            />
+          </Routes>
+        </Suspense>
+      </HashRouter>
+    </DeviceContext.Provider>
   )
 }
 

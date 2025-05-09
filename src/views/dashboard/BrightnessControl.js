@@ -4,11 +4,12 @@ import axiosInst from '../../api/axios'
 import './BrightnessControl.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLightbulb } from '@fortawesome/free-solid-svg-icons'
+import { useDevice } from '../../context/DeviceContext'
 
 const BrightnessControl = () => {
+  const { deviceId } = useDevice()
   const [brightness, setBrightness] = useState(60)
 
-  const deviceId = 'e6d8ace0-1b87-11f0-b556-e7ea660b8ad9'
   const bulbOpacity = Math.max(brightness / 100, 0.1)
 
   const handleBrightnessChange = useCallback(

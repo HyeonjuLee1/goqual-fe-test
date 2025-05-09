@@ -3,10 +3,11 @@ import { CCard, CCardBody, CCol, CRow, CSpinner } from '@coreui/react'
 import axiosInst from '../../api/axios'
 import MainChart from './MainChart'
 import BrightnessControl from './BrightnessControl'
+import { useDevice } from '../../context/DeviceContext'
 
 const DeviceDashboard = () => {
+  const { deviceId } = useDevice()
   const [chartData, setChartData] = useState(null)
-  const deviceId = 'e6d8ace0-1b87-11f0-b556-e7ea660b8ad9'
   const [timeRange, setTimeRange] = useState('')
   const [loading, setLoading] = useState(false)
   const [avgIntervalSec, setAvgIntervalSec] = useState(null)
