@@ -94,6 +94,7 @@ const MainChart = ({ labels, datasets }) => {
           plugins: {
             legend: {
               display: true,
+              position: 'bottom',
             },
             tooltip: {
               callbacks: {
@@ -120,6 +121,13 @@ const MainChart = ({ labels, datasets }) => {
                 autoSkip: true,
                 maxTicksLimit: 10,
               },
+              title: {
+                display: true,
+                text: '시간 (HH:mm)',
+                color: getStyle('--cui-body-color'),
+                font: { size: 12 },
+                align: 'end',
+              },
             },
             y: {
               beginAtZero: true,
@@ -134,6 +142,13 @@ const MainChart = ({ labels, datasets }) => {
                 color: getStyle('--cui-body-color'),
                 maxTicksLimit: 5,
                 stepSize: yStepSize,
+              },
+              title: {
+                display: true,
+                text: '값',
+                color: getStyle('--cui-body-color'),
+                font: { size: 12 },
+                align: 'end',
               },
             },
           },

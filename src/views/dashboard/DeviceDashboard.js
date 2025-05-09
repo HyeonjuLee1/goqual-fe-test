@@ -129,10 +129,12 @@ const DeviceDashboard = () => {
               <h4 id="traffic" className="card-title mb-1">
                 기기 상태 조회
               </h4>
+
               <div className="small text-body-secondary">최근 데이터 범위: {timeRange}</div>
               {avgIntervalSec && (
-                <div className="small text-body-secondary">
-                  평균 갱신 간격: {avgIntervalSec !== 'N/A' ? `${avgIntervalSec}초` : '정보 없음'}
+                <div className="text-muted small">
+                  ⏱ 평균 갱신 간격:{' '}
+                  {avgIntervalSec !== 'N/A' ? `${avgIntervalSec}초` : '정보 없음'}
                 </div>
               )}
             </CCol>
