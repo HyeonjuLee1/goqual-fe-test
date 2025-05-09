@@ -29,3 +29,12 @@
   border: none;
   cursor: pointer;
 }
+
+/* 전구 빛나는 스타일 glow */
+.bulb-icon {
+  transition: filter 0.3s ease;
+}
+
+.bulb-icon.bright {
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.4));
+}
