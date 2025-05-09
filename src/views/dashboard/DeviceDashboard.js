@@ -1,4 +1,4 @@
-import { CCard, CCardBody, CCol, CRow } from '@coreui/react'
+import { CCard, CCardBody, CCol, CRow, CSpinner } from '@coreui/react'
 import { useEffect, useMemo, useState } from 'react'
 import axiosInst from '../../api/axios'
 import MainChart from './MainChart'
@@ -8,6 +8,8 @@ const DeviceDashboard = () => {
   const [chartData, setChartData] = useState(null)
   const deviceId = 'e6d8ace0-1b87-11f0-b556-e7ea660b8ad9'
   const [timeRange, setTimeRange] = useState('')
+  const [loading, setLoading] = useState(false)
+
   // 그래프에 출력할 상태키 배열
   const visibleKeys = useMemo(() => ['wh40batt', 'baromrelin', 'soilad1', 'rainratein'], [])
 
@@ -21,6 +23,7 @@ const DeviceDashboard = () => {
 
   useEffect(() => {
     const loadChartData = async () => {
+      setLoading(true)
       try {
         // 1. 디바이스 key 조회
         const keysRes = await axiosInst.get(
@@ -75,6 +78,8 @@ const DeviceDashboard = () => {
         setChartData({ labels: reverseTimeStamps, datasets })
       } catch (err) {
         console.error('그래프 데이터 조회 실패:', err)
+      } finally {
+        setLoading(false)
       }
     }
 
@@ -83,7 +88,7 @@ const DeviceDashboard = () => {
 
   return (
     <>
-      <CCard className="mb-4">
+      <CCard className="mb-5">
         <CCardBody>
           <CRow>
             <CCol sm={5}>
@@ -93,7 +98,17 @@ const DeviceDashboard = () => {
               <div className="small text-body-secondary">최근 데이터 범위: {timeRange}</div>
             </CCol>
           </CRow>
-          {chartData && <MainChart labels={chartData.labels} datasets={chartData.datasets} />}
+          {loading ? (
+            <div className="text-center py-4">
+              <CSpinner color="primary" />
+            </div>
+          ) : chartData ? (
+            <MainChart labels={chartData.labels} datasets={chartData.datasets} />
+          ) : (
+            <div className="text-center py-4">
+              <div className="mb-2">데이터가 없습니다.</div>
+            </div>
+          )}
         </CCardBody>
       </CCard>
       <BrightnessControl />
